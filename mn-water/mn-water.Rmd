@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyr)
 library(readr)
 library(skimr)
+library(dplyr)
 ```
 
 ```{r import}
@@ -24,9 +25,9 @@ cols(
   mean = col_double(),
   max = col_double()
   )
-
 ```
-```{r}
-summary(water)
+```{r drop_column}
+# drop the empty column created with the extra comma in the data
+water <- water %>% select(-X12)
 ```
 
