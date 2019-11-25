@@ -1,1 +1,65 @@
+---
+title: "US Farm Data"
+author: "Joe Wertz"
+date: "11/22/2019"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, include = FALSE}
+## Import libraries
+library(tidyverse)
+library(tidyr)
+library(readr)
+library(skimr)
+library(dplyr)
+library(usdarnass)
+
+```
+
+```{r, set-key, include = FALSE}
+# Set NASS key from .Renviron
+readRenviron("C:/data/.Renviron")
+Sys.getenv("NASS_KEY")
+```
+
+```{r, state_corn_planted, include = FALSE}
+corn_state <- nass_data(short_desc = "CORN - ACRES PLANTED",
+                        reference_period_desc = "YEAR",
+                        agg_level_desc = "STATE")
+```
+
+```{r, us_corn_planted, include = FALSE}
+us_corn <- nass_data(short_desc = "CORN - ACRES PLANTED",
+                     reference_period_desc = "YEAR",
+                     geo_level = "NATIONAL")
+```
+                     
+
+
+```{r, corn_belt_planted, include = FALSE}
+corn_belt <- corn_state %>% filter(state_name == "IOWA" |
+                        state_name == "ILLINOIS" |
+                        state_name == "INDIANA" |
+                        state_name == "OHIO" |
+                        state_name == "NEBRASKA" |
+                        state_name == "KANSAS" |
+                        state_name == "MINNESOTA" |
+                        state_name == "MISSOURI" |
+                        state_name == "SOUTH DAKOTA" |
+                        state_name == "WISCONSIN")
+                        
+```
+
+```{r}
+ggplot(data = corn_belt,
+       mapping = aes(x = Value,
+                     y = year)) +
+  geom_point()
+
+```
+
 
