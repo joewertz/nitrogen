@@ -15,6 +15,7 @@ library(tidyr)
 library(readr)
 library(skimr)
 library(dplyr)
+library(stringr)
 ```
 
 ```{r import}
@@ -22,12 +23,36 @@ library(dplyr)
 water <- read_csv("water.csv")
 cols(
   pwsId = col_character(),
-  mean = col_double(),
-  max = col_double()
+  year = col_date()
   )
 ```
-```{r drop_column}
-# drop the empty column created with the extra comma in the data
-water <- water %>% select(-X12)
+# create new number-only columns for mean and max
+```{r new_columns}
+water$mean_num <- gsub("[^0-9\\.]","",water$mean)
+water$max_num <- gsub("[^0-9\\.]","",water$max)
+# convert new column to numeric
+water$mean_num <- as.numeric(water$mean_num)
+water$max_num <- as.numeric(water$max_num)
+
 ```
+
+# drop the empty column created with the extra comma in the data
+# drop rows 18184-18194 with source info, url, etc.
+```{r drop_column}
+water <- water %>% select(-X12)
+water <- water %>% filter(row_number() <18183)
+```
+
+# filter for water systems that have mean > 10 mg/l EPA limit
+```{r, over_limit_mean}
+over_limit_mean <- water %>%  filter(mean_num >= 10)
+```
+
+# filter for water systems that have max > 10 mg/l 
+```{r over_limit_max}
+over_limit_max <- water %>%  filter(max_num >= 10)
+over_limit_max %>% 
+ summarise(total_pop = sum(populationServed))
+```
+
 
