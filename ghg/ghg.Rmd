@@ -9,16 +9,49 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+```{r libraries, include = FALSE}
+## Import libraries
+library(tidyverse)
+library(tidyr)
+library(readr)
+library(skimr)
+library(dplyr)
+library(usdarnass)
+library(ggplot2)
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```
+# import the n2o data
+# source:
+```{r import_n2o}
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+n2o <- read_table("N2O_LawDome_MBL.txt", skip = 1, col_names = TRUE)
+cols(
+  year = col_double(),
+  "N2O (ppb)" = col_double()
+)
+```
+# import the co2 data
+# source: xxx
+```{r import_co2}
+co2 <- read_table("CO2_LawDome_MLO.txt", skip = 1, col_names = TRUE)
+cols(
+  year = col_date(),
+  "CO2 (ppm)" = col_double()
+)
 ```
 
+```{r n2o_plot}
+ggplot(data = co2, aes(x = year, y = "N2O (ppb)")) + 
+  #geom_line() +
+  geom_point()
+```
+
+```{r co2_plot}
+ggplot(data = co2, aes(x = year, y = "CO2 (ppm)")) + 
+  geom_point()
+```
+
+}
 ## Including Plots
 
 You can also embed plots, for example:
