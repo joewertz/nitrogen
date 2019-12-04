@@ -16,8 +16,8 @@ library(tidyr)
 library(readr)
 library(skimr)
 library(dplyr)
-library(usdarnass)
 library(ggplot2)
+library(ggthemes)
 
 ```
 # import the n2o data
@@ -26,10 +26,23 @@ library(ggplot2)
 
 n2o <- read_table("N2O_LawDome_MBL.txt", skip = 1, col_names = TRUE)
 cols(
-  year = col_double(),
+  year = col_date(),
   "N2O (ppb)" = col_double()
 )
+# rename column
+n2o <- n2o %>% rename(n2o = "N2O (ppb)")
+
 ```
+
+# create subset of n2o data from 1832-2018
+```{r n2o_subset}
+n2o_subset <- n2o %>% 
+  filter(year >= 1832)
+n2o_subset
+
+```
+
+
 # import the co2 data
 # source: xxx
 ```{r import_co2}
@@ -38,26 +51,22 @@ cols(
   year = col_date(),
   "CO2 (ppm)" = col_double()
 )
+# rename column
+co2 <- co2 %>% rename(co2 = "CO2 (ppm)")
+
 ```
 
-```{r n2o_plot}
-ggplot(data = co2, aes(x = year, y = "N2O (ppb)")) + 
-  #geom_line() +
-  geom_point()
+```{r n2o_subset_plot, echo=FALSE}
+ggplot(data = n2o_subset, aes(x = year, y = n2o)) +
+  geom_point() +
+  labs(x = "Year", y = "n2o ppb") +
+  ggtitle("N2O Emissions: 1832-2018")
+  #scale_color_fivethirtyeight() +
+  #theme_fivethirtyeight()
+
 ```
 
 ```{r co2_plot}
-ggplot(data = co2, aes(x = year, y = "CO2 (ppm)")) + 
-  geom_point()
+ggplot(data = co2, aes(x = year, y = co2)) + 
+  geom_line()
 ```
-
-}
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
