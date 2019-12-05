@@ -1,9 +1,20 @@
 ---
-title: "Minnesota Nitrate"
+title: "Minnesota: Nitrate in Drinking Water"
 author: "Joe Wertz"
 date: "10/22/2019"
 output: html_document
+
 ---
+
+# About this analysis  
+
+Analysis of drinking water testing data to find out how many people were customers of municipal water systems in Minnesota that tested over EPA limit of 10 mg/l for nitrate.  
+
+## Data source:
+Minnesota Department of Health drinking water query: https://data.web.health.state.mn.us/web/mndata/drinkingwater_query
+
+- selected all counties, all dates for contaminant "nitrate" 
+- downloaded .csv
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -18,6 +29,7 @@ library(dplyr)
 library(stringr)
 ```
 
+### Import the data, set pwsId as text instead of numeric
 ```{r import}
 ## import .csv from MNSDWIS
 water <- read_csv("water.csv")
@@ -26,7 +38,13 @@ cols(
   year = col_date()
   )
 ```
-# create new number-only columns for mean and max
+
+### Drop the empty "x12" column created with the extra comma in the data
+```{r drop_column}
+water <- water %>% select(-X12)
+```
+
+### Create new number-only columns for mean and max
 ```{r new_columns}
 water$mean_num <- gsub("[^0-9\\.]","",water$mean)
 water$max_num <- gsub("[^0-9\\.]","",water$max)
@@ -36,19 +54,17 @@ water$max_num <- as.numeric(water$max_num)
 
 ```
 
-# drop the empty column created with the extra comma in the data
-# drop rows 18184-18194 with source info, url, etc.
-```{r drop_column}
-water <- water %>% select(-X12)
+### Drop rows 18184-18194, which include non-data like source info, url, etc.
+```{r drop_rows}
 water <- water %>% filter(row_number() <18183)
 ```
 
-# filter for water systems that have mean > 10 mg/l EPA limit
+### Filter for water systems that have mean > 10 mg/l EPA limit
 ```{r, over_limit_mean}
 over_limit_mean <- water %>%  filter(mean_num >= 10)
 ```
 
-# filter for water systems that have max > 10 mg/l 
+### filter for water systems that have max > 10 mg/l EPA limit and summarize to get total population potentially exposed
 ```{r over_limit_max}
 over_limit_max <- water %>%  filter(max_num >= 10)
 over_limit_max %>% 
