@@ -1,15 +1,23 @@
 # Nitrogen Fertilizer Project
 
-Data wrangling for nitrogen fertilizer project.
+This repo contains Python, R and SQL code and related data, instructions and discussion about data wrangling for the Center for Public Integrity's fertilizer project.
 
-## Getting Started
+## What's in this repo
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+GHG
+- R
 
-### Prerequisites
+mn-water
+- R
 
-What things you need to install the software and how to install them
+us-farm
 
+ammonium-nitrate
+- Python
+
+### Data dictionaries
+
+xxx
 ```
 Give examples
 ```
