@@ -16,14 +16,15 @@ This R notebook contains code and data to analyze Minnesota drinking water data 
 - [us-farm](https://github.com/joewertz/nitrogen/tree/master/us-farm)  
 This R notebook contains code to analyze USDA data for farm and crop statistics.
 
-- [an-facilities]
+- [an-facilities]  
 This Python notebook contains code to scrape TX State Chemist website to generate list of licensed fertilizer registrants.
 
 ### Data dictionaries
 
 ## Authors
 
-* **Joe Wertz** - *Initial work* -
+* **Joe Wertz**
+* **Zachary Goldstein**
 
 
 ## Acknowledgments
