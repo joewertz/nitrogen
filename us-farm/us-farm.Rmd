@@ -27,7 +27,7 @@ library(usdarnass)
 readRenviron("C:/data/.Renviron")
 Sys.getenv("NASS_KEY")
 ```
-
+# get total us farms
 ```{r, us_total_farms}
 us_total_farms <- nass_data(short_desc = "FARM OPERATIONS - NUMBER OF OPERATIONS",
                             source_desc = "CENSUS",
@@ -35,7 +35,7 @@ us_total_farms <- nass_data(short_desc = "FARM OPERATIONS - NUMBER OF OPERATIONS
                             reference_period_desc = "YEAR",
                             agg_level_desc = "NATIONAL")
 ```
-
+# get us farm size
 ```{r, us_farm_size}
 us_farm_size <- nass_data(short_desc = "FARM OPERATIONS - ACRES OPERATED",
                             source_desc = "CENSUS",
@@ -53,21 +53,20 @@ us_avg_farm$Value.y = as.numeric(str_replace_all(us_avg_farm$Value.y, ",", ""))
 us_avg_farm <- us_avg_farm %>% 
   mutate(average_size = Value.y/Value.x)
 ```
-
+# get total corn acres planted at state level
 ```{r, state_corn_planted, include = FALSE}
 corn_state <- nass_data(short_desc = "CORN - ACRES PLANTED",
                         reference_period_desc = "YEAR",
                         agg_level_desc = "STATE")
 ```
-
+# get total corn acres planted at national level
 ```{r, us_corn_planted, include = FALSE}
 us_corn <- nass_data(short_desc = "CORN - ACRES PLANTED",
                      reference_period_desc = "YEAR",
                      geo_level = "NATIONAL")
 ```
                      
-
-
+# get total corn acres planted in corn belt states
 ```{r, corn_belt_planted, include = FALSE}
 corn_belt <- corn_state %>% filter(state_name == "IOWA" |
                         state_name == "ILLINOIS" |
@@ -79,9 +78,8 @@ corn_belt <- corn_state %>% filter(state_name == "IOWA" |
                         state_name == "MISSOURI" |
                         state_name == "SOUTH DAKOTA" |
                         state_name == "WISCONSIN")
-                        
 ```
-
+# plot average_size of us farms
 ```{r}
 ggplot(us_avg_farm, aes(x = year, 
                         y = average_size)) + 
