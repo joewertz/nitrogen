@@ -3,6 +3,8 @@ title: "US Farm Data"
 author: "Joe Wertz"
 date: "11/22/2019"
 output: html_document
+
+### column definitions: https://quickstats.nass.usda.gov/api
 ---
 
 ```{r setup, include = FALSE}
@@ -24,6 +26,32 @@ library(usdarnass)
 # Set NASS key from .Renviron
 readRenviron("C:/data/.Renviron")
 Sys.getenv("NASS_KEY")
+```
+
+```{r, us_total_farms}
+us_total_farms <- nass_data(short_desc = "FARM OPERATIONS - NUMBER OF OPERATIONS",
+                            source_desc = "CENSUS",
+                            domain_desc = "TOTAL",
+                            reference_period_desc = "YEAR",
+                            agg_level_desc = "NATIONAL")
+```
+
+```{r, us_farm_size}
+us_farm_size <- nass_data(short_desc = "FARM OPERATIONS - ACRES OPERATED",
+                            source_desc = "CENSUS",
+                            domain_desc = "TOTAL",
+                            reference_period_desc = "YEAR",
+                            agg_level_desc = "NATIONAL")
+```
+
+# divide total acres by total farms to get average farm size
+```{r, us_avg_farm}
+us_avg_farm <- inner_join(us_total_farms, us_farm_size, by = "year")
+us_avg_farm$Value.x = as.numeric(str_replace_all(us_avg_farm$Value.x, ",", ""))
+us_avg_farm$Value.y = as.numeric(str_replace_all(us_avg_farm$Value.y, ",", ""))
+# create new df by overwriting old df with new average_size column
+us_avg_farm <- us_avg_farm %>% 
+  mutate(average_size = Value.y/Value.x)
 ```
 
 ```{r, state_corn_planted, include = FALSE}
@@ -53,6 +81,13 @@ corn_belt <- corn_state %>% filter(state_name == "IOWA" |
                         state_name == "WISCONSIN")
                         
 ```
+
+```{r}
+ggplot(us_avg_farm, aes(x = year, 
+                        y = average_size)) + 
+  geom_point()
+```
+
 
 ```{r}
 ggplot(data = corn_belt,
