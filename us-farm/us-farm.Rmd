@@ -45,14 +45,13 @@ us_farm_size <- nass_data(short_desc = "FARM OPERATIONS - ACRES OPERATED",
 ```
 
 # divide total acres by total farms to get average farm size
-```{r, us_farm_avg}
+```{r, us_avg_farm}
 us_avg_farm <- inner_join(us_total_farms, us_farm_size, by = "year")
 us_avg_farm$Value.x = as.numeric(str_replace_all(us_avg_farm$Value.x, ",", ""))
 us_avg_farm$Value.y = as.numeric(str_replace_all(us_avg_farm$Value.y, ",", ""))
-us_avg_farm %>% mutate(average_size = Value.y/Value.x)
-# clean up columns
-us_avg_farm %>% 
-  select(year, average_size)
+# create new df by overwriting old df with new average_size column
+us_avg_farm <- us_avg_farm %>% 
+  mutate(average_size = Value.y/Value.x)
 ```
 
 ```{r, state_corn_planted, include = FALSE}
@@ -82,6 +81,13 @@ corn_belt <- corn_state %>% filter(state_name == "IOWA" |
                         state_name == "WISCONSIN")
                         
 ```
+
+```{r}
+ggplot(us_avg_farm, aes(x = year, 
+                        y = average_size)) + 
+  geom_point()
+```
+
 
 ```{r}
 ggplot(data = corn_belt,
