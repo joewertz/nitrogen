@@ -1,6 +1,6 @@
 # Nitrogen Fertilizer Project
 
-This repo contains Python, R and SQL code and related data, instructions and discussion about data wrangling for the Center for Public Integrity's fertilizer project.
+This repo contains Python, R and SQL code and related data, instructions and discussion about data analysis for a Center for Public Integrity's investigation on the environmental, health and public safety consequences of nitrogen fertilziers.
 
 ## What's in this repo
 
