@@ -4,7 +4,9 @@ This repo contains Python, R and SQL code and related data, instructions and dis
 
 ## What's in this repo
 
-GHG
+[ghg](https://github.com/joewertz/nitrogen/tree/master/ghg)
+
+This R notebook contains code and data to analyize global greenhouse gas emissions. Data is from Peter Trans at NOAA/2 Degrees Institute. CO2 data source descriptions are [here](https://www.co2levels.org/#sources). N2O data source descriptions are [here](https://www.n2olevels.org/#sources) and came directly from Trans.
 - R
 
 mn-water
